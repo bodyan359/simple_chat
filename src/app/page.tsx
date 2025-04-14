@@ -28,7 +28,7 @@ export default function Home() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    model: "nvidia/llama-3.3-nemotron-super-49b-v1:free",
+                    model:"gpt-3.5-turbo",
                     messages: [
                         {
                             role: "user",

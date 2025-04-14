@@ -1,5 +1,7 @@
 "use client";
 
+import {useEffect} from "react";
+
 interface ChatViewProps {
   messages: { role: string; content: string }[];
   handleSendMessage: (message: string) => void;
@@ -15,6 +17,23 @@ export const ChatView = ({
   setChatInput,
     loading
 }: ChatViewProps) => {
+
+
+  useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Enter" && chatInput.trim().length > 0) {
+          handleSendMessage(chatInput);
+          setChatInput("");
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [chatInput, handleSendMessage, setChatInput]);
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -28,6 +47,12 @@ export const ChatView = ({
             />
           ))}
         </div>
+        {loading && (
+            <div className="flex items-center gap-2 text-gray-400 mt-2">
+              <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+              <p>Assistant is typing...</p>
+            </div>
+        )}
       </div>
       <div className="p-4 border-t border-neutral-800">
         <div className="flex gap-4">
@@ -58,12 +83,6 @@ const ChatMessage = ({ role, content, loading }: { role: string; content: string
         role === "user" ? "flex-row-reverse" : ""
       }`}
     >
-      {loading && (
-          <div className="flex items-center gap-2 text-gray-400 mt-2">
-            <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-            <p>Assistant is typing...</p>
-          </div>
-      )}
       <div
         className={`${
           role === "user" ? "bg-green-600" : "bg-blue-600"

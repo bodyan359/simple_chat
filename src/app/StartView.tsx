@@ -1,5 +1,7 @@
 "use client";
 
+import {useEffect} from "react";
+
 interface StartViewProps {
   chatPartner: string;
   setChatPartner: (chatPartner: string) => void;
@@ -11,6 +13,22 @@ export const StartView = ({
   setChatPartner,
   handleStartChat,
 }: StartViewProps) => {
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter' && chatPartner.length > 0) {
+        handleStartChat();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleStartChat, chatPartner]);
+
+
   return (
     <div className="flex flex-col items-center justify-center gap-8 h-full">
       <div className="text-2xl font-bold">Simple Chat</div>
