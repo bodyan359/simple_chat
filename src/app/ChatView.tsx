@@ -5,6 +5,7 @@ interface ChatViewProps {
   handleSendMessage: (message: string) => void;
   chatInput: string;
   setChatInput: (chatInput: string) => void;
+  loading: boolean;
 }
 
 export const ChatView = ({
@@ -12,6 +13,7 @@ export const ChatView = ({
   handleSendMessage,
   chatInput,
   setChatInput,
+    loading
 }: ChatViewProps) => {
   return (
     <div className="h-full flex flex-col">
@@ -22,6 +24,7 @@ export const ChatView = ({
               key={index}
               role={message.role}
               content={message.content}
+              loading={loading}
             />
           ))}
         </div>
@@ -37,7 +40,8 @@ export const ChatView = ({
           />
           <button
             onClick={() => handleSendMessage(chatInput)}
-            className="px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-600"
+            className="px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-600 disabled:cursor-not-allowed"
+            disabled={chatInput.length <= 0}
           >
             Send
           </button>
@@ -47,13 +51,19 @@ export const ChatView = ({
   );
 };
 
-const ChatMessage = ({ role, content }: { role: string; content: string }) => {
+const ChatMessage = ({ role, content, loading }: { role: string; content: string, loading: boolean }) => {
   return (
     <div
       className={`flex gap-2 items-center ${
         role === "user" ? "flex-row-reverse" : ""
       }`}
     >
+      {loading && (
+          <div className="flex items-center gap-2 text-gray-400 mt-2">
+            <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+            <p>Assistant is typing...</p>
+          </div>
+      )}
       <div
         className={`${
           role === "user" ? "bg-green-600" : "bg-blue-600"

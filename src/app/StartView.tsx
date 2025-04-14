@@ -35,8 +35,9 @@ export const StartView = ({
         />
       </div>
       <button
-        className="bg-neutral-800 px-4 py-2 text-lg rounded-lg border border-neutral-700"
+        className={`bg-neutral-800 px-4 py-2 text-lg rounded-lg border  border-neutral-700 disabled:cursor-not-allowed`}
         onClick={handleStartChat}
+        disabled={chatPartner.length <= 0}
       >
         Start Chat
       </button>
